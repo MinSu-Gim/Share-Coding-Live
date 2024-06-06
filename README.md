@@ -1,7 +1,6 @@
 # 💻 쉐코라 ( Share Coding Live )
 
-## 🌈쉐코라 소개 / 시연 영상🌈
-https://www.youtube.com/watch?v=od30ifCdaBc
+## 🌈쉐코라 소개 🌈
 
 - ## 📑 의의
 
