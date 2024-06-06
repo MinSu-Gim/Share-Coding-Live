@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.codragon.sclive.mapper.ConferenceHistoryMapper">
+
+    <insert id="create" parameterType="HistoryCreateDao">
+        INSERT INTO conference_history (`user_email`, `course_id`, `join_time`) VALUES (#{email}, #{uuid}, now());
+    </insert>
+
+    <resultMap id="dateOfCourseResultMap" type="UserHistoryCourse">
+        <result column="dateOfCourse" property="dateOfCourse" />
+        <collection property="courses" resultMap="infoOfCourseResultMap" />
+    </resultMap>
+
+    <resultMap id="infoOfCourseResultMap" type="Course">
+        <result column="courseUUID" property="courseUUID" />
+        <result column="title" property="title" />
+        <result column="teacher" property="teacher" />
+    </resultMap>
+
+    <select id="getUserConferenceHistory" parameterType="String" resultMap="dateOfCourseResultMap">
+        SELECT DATE(c.start_time) AS dateOfCourse,
+            c.course_id AS courseUUID,
+            c.title AS title,
+            (SELECT nickname FROM `user` WHERE email = c.owner_email) AS teacher
+        FROM conference_history ch
+            JOIN `user` u ON ch.user_email = u.email
+            JOIN conference c ON ch.course_id = c.course_id
+        WHERE ch.user_email = #{userEmail};
+    </select>
+
+</mapper>
